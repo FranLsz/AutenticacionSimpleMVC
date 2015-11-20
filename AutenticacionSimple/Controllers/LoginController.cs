@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using AutenticacionSimple.Models;
 
 namespace AutenticacionSimple.Controllers
@@ -28,8 +30,9 @@ namespace AutenticacionSimple.Controllers
                 //asigna el usuario en el rol
                 var prin = new GenericPrincipal(iden, new[] { "usuario" });
 
-                HttpContext.User = prin;
-
+                //HttpContext.User = prin;
+                Thread.CurrentPrincipal = prin;
+                FormsAuthentication.SetAuthCookie(model.Login, false);
                 return RedirectToAction("Index", "Home");
             }
             ModelState.AddModelError("err", "Autentitacion incorrecta");
